@@ -1,0 +1,12 @@
+mode: MainLine
+next-version: 1.0.0
+assembly-informational-format: "{NugetVersion}"
+branches:
+  master:
+    tag: ''
+  feature:
+    tag: beta-{BranchName}
+  hotfix:
+    tag: beta-{BranchName}
+ignore:
+  sha: []
