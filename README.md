@@ -1,2 +1,2 @@
 # EventBus.RabbitMQ.Standard
-A library for event-based communication by using RabbitMQ.
+A library for the event-based communication by using RabbitMQ.
