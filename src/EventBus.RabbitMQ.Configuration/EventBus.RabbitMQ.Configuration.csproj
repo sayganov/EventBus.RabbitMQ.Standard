@@ -7,8 +7,9 @@
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/sayganov/EventBus.RabbitMQ.Standard</RepositoryUrl>
     <PackageProjectUrl>https://github.com/sayganov/EventBus.RabbitMQ.Standard</PackageProjectUrl>
-    <PackageLicenseFile></PackageLicenseFile>
-    <PackageIconUrl>..\..\assets\icon_144x144.png</PackageIconUrl>    
+    <Description>A library for the event-bus communication by using RabbitMQ</Description>
+    <PackageTags>dotnet netstandard csharp rabbitmq eventbus</PackageTags>
+    <PackageIconUrl>https://github.com/sayganov/EventBus.RabbitMQ.Standard/blob/feature/package-icon/assets/icon_64x64.png?raw=true</PackageIconUrl>
   </PropertyGroup>
 
   <ItemGroup>
