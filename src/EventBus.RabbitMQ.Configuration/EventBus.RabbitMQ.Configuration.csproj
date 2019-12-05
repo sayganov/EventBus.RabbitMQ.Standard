@@ -6,7 +6,9 @@
     <Authors>Georgy Sayganov</Authors>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/sayganov/EventBus.RabbitMQ.Standard</RepositoryUrl>
-    <PackageProjectUrl>https://github.com/sayganov/EventBus.RabbitMQ.Standard</PackageProjectUrl>    
+    <PackageProjectUrl>https://github.com/sayganov/EventBus.RabbitMQ.Standard</PackageProjectUrl>
+    <PackageLicenseFile></PackageLicenseFile>
+    <PackageIconUrl>..\..\assets\icon_144x144.png</PackageIconUrl>    
   </PropertyGroup>
 
   <ItemGroup>
