@@ -1,0 +1,43 @@
+name: NuGet
+
+on:
+  push:
+    branches:
+      - master
+      - feature/*
+      - hotfix/*
+
+jobs:
+  job-ubuntu:
+    name: job-ubuntu
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+
+      - name: Fetch tags and master for GitVersion
+        run: |
+          git fetch --tags
+          git branch --create-reflog master origin/master
+
+      - name: Setup GitVersion
+        id: gitversion
+        uses: roryprimrose/rungitversion@v1.0.0
+
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 2.2.108
+
+      - name: Restore
+        run: dotnet restore $GITHUB_WORKSPACE/src
+
+      - name: Build
+        run: dotnet build $GITHUB_WORKSPACE/src/EventBus.RabbitMQ.Configuration/EventBus.RabbitMQ.Configuration.csproj -c Release
+
+      - name: Pack
+        run: dotnet pack $GITHUB_WORKSPACE/src/EventBus.RabbitMQ.Configuration/EventBus.RabbitMQ.Configuration.csproj -c Release -p:PackageVersion=${{ steps.gitversion.outputs.SemVer }}
+
+      - name: Push
+        run: dotnet nuget push EventBus.RabbitMQ.Standard.${{ steps.gitversion.outputs.SemVer }}.nupkg -k ${{ secrets.NUGET_API_KEY }} -s https://api.nuget.org/v3/index.json

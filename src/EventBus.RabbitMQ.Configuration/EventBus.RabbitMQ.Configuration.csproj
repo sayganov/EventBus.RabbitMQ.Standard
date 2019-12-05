@@ -2,6 +2,11 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <PackageId>EventBus.RabbitMQ.Standard</PackageId>
+    <Authors>Georgy Sayganov</Authors>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/sayganov/EventBus.RabbitMQ.Standard</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/sayganov/EventBus.RabbitMQ.Standard</PackageProjectUrl>    
   </PropertyGroup>
 
   <ItemGroup>
