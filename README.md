@@ -1,10 +1,12 @@
-# EventBus.RabbitMQ.Standard  ![Actions Status](https://github.com/sayganov/EventBus.RabbitMQ.Standard/workflows/NuGet/badge.svg)
+# EventBus.RabbitMQ.Standard  ![Actions Status](https://github.com/sayganov/EventBus.RabbitMQ.Standard/workflows/NuGet/badge.svg) [![NuGet](http://img.shields.io/nuget/v/EventBus.RabbitMQ.Standard.svg)](https://www.nuget.org/packages/EventBus.RabbitMQ.Standard/)
 
 A library for the event-based communication by using RabbitMQ.
 
 ## NuGet
 
-`PM> Install-Package EventBus.RabbitMQ.Standard`
+```
+PM> Install-Package EventBus.RabbitMQ.Standard
+```
 
 ## Contributing
 

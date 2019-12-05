@@ -9,7 +9,7 @@
     <PackageProjectUrl>https://github.com/sayganov/EventBus.RabbitMQ.Standard</PackageProjectUrl>
     <Description>A library for the event-bus communication by using RabbitMQ</Description>
     <PackageTags>dotnet netstandard csharp rabbitmq eventbus</PackageTags>
-    <PackageIconUrl>https://github.com/sayganov/EventBus.RabbitMQ.Standard/blob/feature/package-icon/assets/icon_64x64.png?raw=true</PackageIconUrl>
+    <PackageIconUrl>https://github.com/sayganov/EventBus.RabbitMQ.Standard/blob/master/assets/icon_64x64.png?raw=true</PackageIconUrl>
   </PropertyGroup>
 
   <ItemGroup>
