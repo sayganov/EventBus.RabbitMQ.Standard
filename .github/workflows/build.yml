@@ -2,10 +2,9 @@ name: Build
 
 on:
   push:
-    branches:
-      - master
-      - feature/*
-      - hotfix/*
+    paths:
+      - src/**
+      - .github/workflows/**
 
 jobs:
   job-ubuntu:
