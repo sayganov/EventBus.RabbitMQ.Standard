@@ -1,32 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using Autofac;
+﻿using Autofac;
 using EventBus.Base;
+using EventBus.RabbitMQ.Configuration.Options;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace EventBus.RabbitMQ.Configuration
 {
     public static class EventBus
     {
-        public static IServiceCollection AddEventBus<T>(this IServiceCollection services, Action<EventBusOption> options, List<T> handlers)
+        public static IServiceCollection AddEventBus(this IServiceCollection services, EventBusOptions options)
         {
-            var configureOptions = new EventBusOption();
-            options(configureOptions);
-
             services.AddSingleton<IEventBus, EventBusRabbitMq>(sp =>
             {
                 var rabbitMqPersistentConnection = sp.GetRequiredService<IRabbitMqPersistentConnection>();
                 var lifetimeScope = sp.GetRequiredService<ILifetimeScope>();
                 var eventBusSubscriptionsManager = sp.GetRequiredService<IEventBusSubscriptionManager>();
 
-                var brokerName = configureOptions.BrokerName;
-                var autofacScopeName = configureOptions.AutofacScopeName;
-                var queueName = configureOptions.QueueName;
+                var brokerName = options.BrokerName;
+                var autofacScopeName = options.AutofacScopeName;
+                var queueName = options.QueueName;
                 var retryCount = 5;
 
-                if (!string.IsNullOrEmpty(configureOptions.RetryCount))
+                if (!string.IsNullOrEmpty(options.RetryCount))
                 {
-                    retryCount = int.Parse(configureOptions.RetryCount);
+                    retryCount = int.Parse(options.RetryCount);
                 }
 
                 return new EventBusRabbitMq(rabbitMqPersistentConnection,
@@ -39,9 +35,6 @@ namespace EventBus.RabbitMQ.Configuration
             });
 
             services.AddSingleton<IEventBusSubscriptionManager, InMemoryEventBusSubscriptionManager>();
-
-            //Event handlers
-            foreach (var handler in handlers) services.AddTransient(handler.GetType());
 
             return services;
         }

@@ -32,9 +32,6 @@ jobs:
       - name: Restore
         run: dotnet restore $GITHUB_WORKSPACE/src
 
-      - name: Build
-        run: dotnet build $GITHUB_WORKSPACE/src/EventBus.RabbitMQ.Configuration/EventBus.RabbitMQ.Configuration.csproj -c Release
-
       - name: Pack
         run: dotnet pack $GITHUB_WORKSPACE/src/EventBus.RabbitMQ.Configuration/EventBus.RabbitMQ.Configuration.csproj -c Release -p:PackageVersion=${{ steps.gitversion.outputs.SemVer }}
 
