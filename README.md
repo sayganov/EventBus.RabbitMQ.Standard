@@ -1,4 +1,4 @@
-# EventBus.RabbitMQ.Standard  ![Actions Status](https://github.com/sayganov/EventBus.RabbitMQ.Standard/workflows/Build/badge.svg) [![NuGet Badge](https://buildstats.info/nuget/EventBus.RabbitMQ.Standard?includePreReleases=false)](https://www.nuget.org/packages/EventBus.RabbitMQ.Standard)
+# EventBus.RabbitMQ.Standard  ![Actions Status](https://github.com/sayganov/EventBus.RabbitMQ.Standard/workflows/Build/badge.svg) [![NuGet Badge](https://buildstats.info/nuget/EventBus.RabbitMQ.Standard?includePreReleases=false)](https://www.nuget.org/packages/EventBus.RabbitMQ.Standard) [![CodeFactor](https://www.codefactor.io/repository/github/sayganov/eventbus.rabbitmq.standard/badge)](https://www.codefactor.io/repository/github/sayganov/eventbus.rabbitmq.standard)
 
 A library for the event-based communication by using RabbitMQ.
 
