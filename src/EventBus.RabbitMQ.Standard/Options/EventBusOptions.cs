@@ -1,4 +1,4 @@
-﻿namespace EventBus.RabbitMQ.Configuration.Options
+﻿namespace EventBus.RabbitMQ.Standard.Options
 {
     public class EventBusOptions
     {

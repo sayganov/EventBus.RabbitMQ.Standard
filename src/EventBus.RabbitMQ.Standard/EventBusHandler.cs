@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace EventBus.RabbitMQ.Configuration
+namespace EventBus.RabbitMQ.Standard
 {
     public static class EventBusHandler
     {

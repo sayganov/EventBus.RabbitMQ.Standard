@@ -1,7 +1,7 @@
 ﻿using System;
 using Newtonsoft.Json;
 
-namespace EventBus.Base
+namespace EventBus.RabbitMQ.Standard.Base
 {
     public class IntegrationEvent
     {

@@ -1,8 +1,9 @@
-﻿using EventBus.RabbitMQ.Configuration.Options;
+﻿using EventBus.RabbitMQ.Standard.Options;
+using EventBus.RabbitMQ.Standard.RabbitMq;
 using Microsoft.Extensions.DependencyInjection;
 using RabbitMQ.Client;
 
-namespace EventBus.RabbitMQ.Configuration
+namespace EventBus.RabbitMQ.Standard
 {
     public static class EventBusConnection
     {

@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace EventBus.Base
+namespace EventBus.RabbitMQ.Standard.Base
 {
     public interface IDynamicIntegrationEventHandler
     {

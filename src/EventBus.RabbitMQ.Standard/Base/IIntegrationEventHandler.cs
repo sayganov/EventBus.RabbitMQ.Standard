@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace EventBus.Base
+namespace EventBus.RabbitMQ.Standard.Base
 {
     public interface IIntegrationEventHandler<in TIntegrationEvent> : IIntegrationEventHandler where TIntegrationEvent : IntegrationEvent
     {

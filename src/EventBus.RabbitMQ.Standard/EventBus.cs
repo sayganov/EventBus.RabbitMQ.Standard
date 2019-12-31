@@ -1,9 +1,10 @@
 ﻿using Autofac;
-using EventBus.Base;
-using EventBus.RabbitMQ.Configuration.Options;
+using EventBus.RabbitMQ.Standard.Base;
+using EventBus.RabbitMQ.Standard.Options;
+using EventBus.RabbitMQ.Standard.RabbitMq;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace EventBus.RabbitMQ.Configuration
+namespace EventBus.RabbitMQ.Standard
 {
     public static class EventBus
     {

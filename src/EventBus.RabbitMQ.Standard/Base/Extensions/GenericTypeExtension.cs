@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-namespace EventBus.Base.Extensions
+namespace EventBus.RabbitMQ.Standard.Base.Extensions
 {
     public static class GenericTypeExtension
     {

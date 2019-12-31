@@ -3,7 +3,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using Autofac;
-using EventBus.Base;
+using EventBus.RabbitMQ.Standard.Base;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Polly;
@@ -11,7 +11,7 @@ using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using RabbitMQ.Client.Exceptions;
 
-namespace EventBus.RabbitMQ
+namespace EventBus.RabbitMQ.Standard.RabbitMq
 {
     public class EventBusRabbitMq : IEventBus, IDisposable
     {
