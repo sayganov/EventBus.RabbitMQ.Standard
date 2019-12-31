@@ -35,5 +35,5 @@ jobs:
       - name: Pack
         run: dotnet pack $GITHUB_WORKSPACE/src/EventBus.RabbitMQ.Configuration/EventBus.RabbitMQ.Configuration.csproj -c Release -p:PackageVersion=${{ steps.gitversion.outputs.SemVer }}
 
-      - name: Push
+      - name: Push EventBus.RabbitMQ.Standard.${{ steps.gitversion.outputs.SemVer }}
         run: dotnet nuget push $GITHUB_WORKSPACE/src/EventBus.RabbitMQ.Configuration/bin/Release/EventBus.RabbitMQ.Standard.${{ steps.gitversion.outputs.SemVer }}.nupkg -k ${{ secrets.NUGET_API_KEY }} -s https://api.nuget.org/v3/index.json

@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <Version>1.0.0</Version>
     <PackageId>EventBus.RabbitMQ.Standard</PackageId>
     <Authors>Georgy Sayganov</Authors>
     <RepositoryType>git</RepositoryType>
@@ -11,6 +12,7 @@
     <PackageTags>dotnet netstandard csharp rabbitmq eventbus</PackageTags>
     <PackageIcon>icon_64x64.png</PackageIcon>
     <PackageIconUrl>https://github.com/sayganov/EventBus.RabbitMQ.Standard/blob/master/assets/icon_64x64.png?raw=true</PackageIconUrl>
+    <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);CopyProjectReferencesToPackage</TargetsForTfmSpecificBuildOutput>
   </PropertyGroup>
 
   <ItemGroup>
@@ -22,7 +24,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\EventBus.Base\EventBus.Base.csproj" />
     <ProjectReference Include="..\EventBus.RabbitMQ\EventBus.RabbitMQ.csproj" />
   </ItemGroup>
+
+  <Target DependsOnTargets="ResolveReferences" Name="CopyProjectReferencesToPackage">
+    <ItemGroup>
+      <BuildOutputInPackage Include="@(ReferenceCopyLocalPaths->WithMetadataValue('ReferenceSourceTarget', 'ProjectReference'))"/>
+    </ItemGroup>
+  </Target>
 
 </Project>
