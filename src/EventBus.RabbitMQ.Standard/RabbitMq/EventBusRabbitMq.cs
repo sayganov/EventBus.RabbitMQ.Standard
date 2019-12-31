@@ -155,14 +155,16 @@ namespace EventBus.RabbitMQ.Standard.RabbitMq
 
         private void StartBasicConsume()
         {
-            if (_consumerChannel != null)
+            if (_consumerChannel == null)
             {
-                var consumer = new AsyncEventingBasicConsumer(_consumerChannel);
-
-                consumer.Received += Consumer_Received;
-
-                _consumerChannel.BasicConsume(_queueName, false, consumer);
+                return;
             }
+            
+            var consumer = new AsyncEventingBasicConsumer(_consumerChannel);
+
+            consumer.Received += Consumer_Received;
+
+            _consumerChannel.BasicConsume(_queueName, false, consumer);
         }
 
         private async Task Consumer_Received(object sender, BasicDeliverEventArgs eventArgs)
@@ -218,6 +220,7 @@ namespace EventBus.RabbitMQ.Standard.RabbitMq
                 {
                     var subscriptions = _subsManager.GetHandlersForEvent(eventName);
                     foreach (var subscription in subscriptions)
+                    {
                         if (subscription.IsDynamic)
                         {
                             if (!(scope.ResolveOptional(subscription.HandlerType) is IDynamicIntegrationEventHandler handler))
@@ -245,6 +248,7 @@ namespace EventBus.RabbitMQ.Standard.RabbitMq
                             await Task.Yield();
                             await (Task) concreteType.GetMethod("Handle").Invoke(handler, new[] { integrationEvent });
                         }
+                    }
                 }
             }
         }
