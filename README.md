@@ -2,12 +2,173 @@
 
 A library for the event-based communication by using RabbitMQ.
 
-## NuGet
-
+## How-To
+Install a couple of **`NuGet`** packages.
 ```
+PM> Install-Package Autofac.Extensions.DependencyInjection
 PM> Install-Package EventBus.RabbitMQ.Standard
 ```
 
-## How To
+Add configuration to **`appsettings.json`**.
+```
+{
+  "EventBus": {
+    "BrokerName": "test_broker",
+    "AutofacScopeName": "test_autofac",
+    "QueueName": "test_queue",
+    "RetryCount": "5",
+    "VirtualHost": "your_virtual_host",
+    "Username": "your_username",
+    "Password": "your_password",
+    "Connection": "your_connection",
+    "DispatchConsumersAsync": true
+  }
+}
+```
+**Note:** I find pretty easy to use [CloudAMQP](https://www.cloudamqp.com/). Alternatively, you can run a Docker container for RabbiMQ on a local machine.
 
-Please, have a look at the blog post [.NET Core + RabbitMQ: Part 1](https://medium.com/@georgysay/net-core-rabbitmq-part-1-8da5e718d9dc).
+In **`publisher`** and **`subscriber`** apps, create a new class called **`ItemCreatedIntegrationEvent`**.
+```
+public class ItemCreatedIntegrationEvent : IntegrationEvent
+{
+    public string Title { get; set; }
+    public string Description { get; set; }
+
+    public ItemCreatedIntegrationEvent(string title, string description)
+    {
+        Title = title;
+        Description = description;
+    }
+}
+```
+
+In the **`subscriber`** app, create a new class called **`ItemCreatedIntegrationEventHandler`**.
+```
+public class ItemCreatedIntegrationEventHandler : IIntegrationEventHandler<ItemCreatedIntegrationEvent>
+{
+    public ItemCreatedIntegrationEventHandler()
+    {
+    }
+
+    public async Task Handle(ItemCreatedIntegrationEvent @event)
+    {
+        //Handle the ItemCreatedIntegrationEvent event here.
+    }
+}
+```
+
+Modify **`Program.cs`** by adding one line of code to the class.
+```
+public class Program
+{
+    public static void Main(string[] args)
+    {
+        CreateHostBuilder(args).Build().Run();
+    }
+
+    public static IHostBuilder CreateHostBuilder(string[] args) =>
+        Host.CreateDefaultBuilder(args)
+            .UseServiceProviderFactory(new AutofacServiceProviderFactory())
+            .ConfigureWebHostDefaults(webBuilder =>
+            {
+                webBuilder.UseStartup<Startup>();
+            });
+}
+```
+
+In the **`publisher`** app, modify the method **`ConfigureServices`** in **`Startup.cs`**.
+```
+public class Startup
+{
+    public void ConfigureServices(IServiceCollection services)
+    {
+        ...
+
+        var eventBusOptions = Configuration.GetSection("EventBus").Get<EventBusOptions>();
+
+        services.AddEventBusConnection(eventBusOptions);
+        services.AddEventBus(eventBusOptions);
+
+        ...
+    }
+}
+```
+
+In the **`subscriber`** app, create an extension called **`EventBusExtension`**.
+```
+public static class EventBusExtension
+{
+    public static IEnumerable<IIntegrationEventHandler> GetHandlers()
+    {
+        return new List<IIntegrationEventHandler>
+        {
+            new ItemCreatedIntegrationEventHandler()
+        };
+    }
+
+    public static IApplicationBuilder SubscribeToEvents(this IApplicationBuilder app)
+    {
+        var eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
+
+        eventBus.Subscribe<ItemCreatedIntegrationEvent, ItemCreatedIntegrationEventHandler>();
+
+        return app;
+    }
+}
+```
+
+In the **`subscriber`** app, modify **`ConfigureServices`** and **`Configure`** methods in **`Startup.cs`**.
+```
+public class Startup
+{
+    public void ConfigureServices(IServiceCollection services)
+    {
+        ...
+
+        var eventBusOptions = Configuration.GetSection("EventBus").Get<EventBusOptions>();
+
+        services.AddEventBusConnection(eventBusOptions);
+        services.AddEventBus(eventBusOptions);
+        services.AddEventBusHandler(EventBusExtension.GetHandlers());
+
+        ...
+    }
+
+    public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+    {
+        ...
+
+        app.UseAuthorization();
+
+        ...
+    }
+}
+```
+
+Publish the ItemCreatedIntegrationEvent event in the **`publisher`** app by using the following code, for example in a controller.
+```
+public class ItemController : ControllerBase
+{
+    private readonly IEventBus _eventBus;
+
+    public ItemController(IEventBus eventBus)
+    {
+        _eventBus = eventBus;
+    }
+
+    [HttpPost]
+    public IActionResult Publish()
+    {
+        var message = new ItemCreatedIntegrationEvent("Item title", "Item description");
+
+        _eventBus.Publish(message);
+
+        return Ok();
+    }
+}
+```
+
+## References
+- [eShopOnContainers](https://github.com/dotnet-architecture/eShopOnContainers)
+- [RabbitMQ](https://www.rabbitmq.com/)
+- [CloudAMQP](https://www.cloudamqp.com/)
