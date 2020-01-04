@@ -2,6 +2,12 @@
 
 A library for the event-based communication by using RabbitMQ.
 
+![Diagram](https://github.com/sayganov/EventBus.RabbitMQ.Standard/blob/master/assets/diagram.png?raw=true)
+
+## Samples
+- [Publisher app](https://github.com/sayganov/EventBus.RabbitMQ.Standard/tree/master/samples/Publisher)
+- [Subscriber app](https://github.com/sayganov/EventBus.RabbitMQ.Standard/tree/master/samples/Subscriber)
+
 ## How-To
 Install a couple of **`NuGet`** packages.
 ```
