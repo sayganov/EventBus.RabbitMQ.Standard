@@ -5,17 +5,21 @@ A library for the event-based communication by using RabbitMQ.
 ![Diagram](https://github.com/sayganov/EventBus.RabbitMQ.Standard/blob/master/assets/diagram.png?raw=true)
 
 ## Samples
+
 - [Publisher app](https://github.com/sayganov/EventBus.RabbitMQ.Standard/tree/master/samples/Publisher)
 - [Subscriber app](https://github.com/sayganov/EventBus.RabbitMQ.Standard/tree/master/samples/Subscriber)
 
 ## How-To
+
 Install a couple of **`NuGet`** packages.
-```
+
+```console
 PM> Install-Package Autofac.Extensions.DependencyInjection
 PM> Install-Package EventBus.RabbitMQ.Standard
 ```
 
 Add configuration to **`appsettings.json`**.
+
 ```json
 {
   "EventBus": {
@@ -31,9 +35,11 @@ Add configuration to **`appsettings.json`**.
   }
 }
 ```
+
 **Note:** I find pretty easy to use [CloudAMQP](https://www.cloudamqp.com/). Alternatively, you can run a Docker container for RabbiMQ on a local machine.
 
 In **`publisher`** and **`subscriber`** apps, create a new class called **`ItemCreatedIntegrationEvent`**.
+
 ```csharp
 public class ItemCreatedIntegrationEvent : IntegrationEvent
 {
@@ -49,6 +55,7 @@ public class ItemCreatedIntegrationEvent : IntegrationEvent
 ```
 
 In the **`subscriber`** app, create a new class called **`ItemCreatedIntegrationEventHandler`**.
+
 ```csharp
 public class ItemCreatedIntegrationEventHandler : IIntegrationEventHandler<ItemCreatedIntegrationEvent>
 {
@@ -64,6 +71,7 @@ public class ItemCreatedIntegrationEventHandler : IIntegrationEventHandler<ItemC
 ```
 
 Modify **`Program.cs`** by adding one line of code to the class.
+
 ```csharp
 public class Program
 {
@@ -83,6 +91,7 @@ public class Program
 ```
 
 In the **`publisher`** app, modify the method **`ConfigureServices`** in **`Startup.cs`**.
+
 ```csharp
 public class Startup
 {
@@ -101,6 +110,7 @@ public class Startup
 ```
 
 In the **`subscriber`** app, create an extension called **`EventBusExtension`**.
+
 ```csharp
 public static class EventBusExtension
 {
@@ -124,6 +134,7 @@ public static class EventBusExtension
 ```
 
 In the **`subscriber`** app, modify **`ConfigureServices`** and **`Configure`** methods in **`Startup.cs`**.
+
 ```csharp
 public class Startup
 {
@@ -152,6 +163,7 @@ public class Startup
 ```
 
 Publish the ItemCreatedIntegrationEvent event in the **`publisher`** app by using the following code, for example in a controller.
+
 ```csharp
 public class ItemController : ControllerBase
 {
@@ -175,12 +187,15 @@ public class ItemController : ControllerBase
 ```
 
 ## Code of Conduct
+
 See [CODE_OF_CONDUCT.md](https://github.com/sayganov/EventBus.RabbitMQ.Standard/blob/master/CODE_OF_CONDUCT.md).
 
 ## Contributing
+
 See [CONTRIBUTING.md](https://github.com/sayganov/EventBus.RabbitMQ.Standard/blob/master/CONTRIBUTING.md).
 
 ## References
+
 - [eShopOnContainers](https://github.com/dotnet-architecture/eShopOnContainers)
 - [RabbitMQ](https://www.rabbitmq.com/)
 - [CloudAMQP](https://www.cloudamqp.com/)
