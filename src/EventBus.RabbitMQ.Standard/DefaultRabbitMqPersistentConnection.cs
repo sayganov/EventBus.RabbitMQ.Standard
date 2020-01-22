@@ -6,7 +6,7 @@ using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using RabbitMQ.Client.Exceptions;
 
-namespace EventBus.RabbitMQ.Standard.RabbitMq
+namespace EventBus.RabbitMQ.Standard
 {
     public class DefaultRabbitMqPersistentConnection : IRabbitMqPersistentConnection
     {

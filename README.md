@@ -22,7 +22,7 @@ Add configuration to **`appsettings.json`**.
 
 ```json
 {
-  "EventBus": {
+  "RabbitMq": {
     "BrokerName": "test_broker",
     "AutofacScopeName": "test_autofac",
     "QueueName": "test_queue",
@@ -30,7 +30,7 @@ Add configuration to **`appsettings.json`**.
     "VirtualHost": "your_virtual_host",
     "Username": "your_username",
     "Password": "your_password",
-    "Connection": "your_connection",
+    "Host": "your_host",
     "DispatchConsumersAsync": true
   }
 }
@@ -99,10 +99,10 @@ public class Startup
     {
         ...
 
-        var eventBusOptions = Configuration.GetSection("EventBus").Get<EventBusOptions>();
+        var rabbitMqOptions = Configuration.GetSection("RabbitMq").Get<RabbitMqOptions>();
 
-        services.AddEventBusConnection(eventBusOptions);
-        services.AddEventBus(eventBusOptions);
+        services.AddRabbitMqConnection(rabbitMqOptions);
+        services.AddRabbitMqRegistration(rabbitMqOptions);
 
         ...
     }
@@ -142,11 +142,11 @@ public class Startup
     {
         ...
 
-        var eventBusOptions = Configuration.GetSection("EventBus").Get<EventBusOptions>();
+        var rabbitMqOptions = Configuration.GetSection("RabbitMq").Get<RabbitMqOptions>();
 
-        services.AddEventBusConnection(eventBusOptions);
-        services.AddEventBus(eventBusOptions);
-        services.AddEventBusHandler(EventBusExtension.GetHandlers());
+        services.AddRabbitMqConnection(rabbitMqOptions);
+        services.AddRabbitMqRegistration(rabbitMqOptions);
+        services.AddEventBusHandling(EventBusExtension.GetHandlers());
 
         ...
     }
@@ -196,6 +196,8 @@ See [CONTRIBUTING.md](https://github.com/sayganov/EventBus.RabbitMQ.Standard/blo
 
 ## References
 
-- [eShopOnContainers](https://github.com/dotnet-architecture/eShopOnContainers)
+- [Publisher-Subscriber pattern](https://docs.microsoft.com/en-us/azure/architecture/patterns/publisher-subscriber)
 - [RabbitMQ](https://www.rabbitmq.com/)
 - [CloudAMQP](https://www.cloudamqp.com/)
+- [eShopOnContainers](https://github.com/dotnet-architecture/eShopOnContainers)
+- [.NET Core + RabbitMQ = 🎉](https://medium.com/@georgysay/net-core-rabbitmq-part-1-8da5e718d9dc)
