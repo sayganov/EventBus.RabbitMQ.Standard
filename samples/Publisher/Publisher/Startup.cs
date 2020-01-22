@@ -1,4 +1,4 @@
-using EventBus.RabbitMQ.Standard;
+using EventBus.RabbitMQ.Standard.Configuration;
 using EventBus.RabbitMQ.Standard.Options;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -21,10 +21,10 @@ namespace Publisher
         public void ConfigureServices(IServiceCollection services)
         {
             //Event Bus
-            var eventBusOptions = Configuration.GetSection("EventBus").Get<EventBusOptions>();
+            var rabbitMqOptions = Configuration.GetSection("RabbitMq").Get<RabbitMqOptions>();
 
-            services.AddEventBusConnection(eventBusOptions);
-            services.AddEventBus(eventBusOptions);
+            services.AddRabbitMqConnection(rabbitMqOptions);
+            services.AddRabbitMqRegistration(rabbitMqOptions);
 
             //Swagger
             services.AddSwaggerGen(c =>

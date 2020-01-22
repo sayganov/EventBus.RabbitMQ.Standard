@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using EventBus.RabbitMQ.Standard.Base;
+using EventBus.Base.Standard;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Subscriber.IntegrationEvents.Events;

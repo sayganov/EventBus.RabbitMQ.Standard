@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using EventBus.RabbitMQ.Standard.Base;
+using EventBus.Base.Standard;
 using Subscriber.IntegrationEvents.Events;
 
 namespace Subscriber.IntegrationEvents.Handlers
