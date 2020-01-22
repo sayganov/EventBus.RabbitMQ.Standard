@@ -1,4 +1,4 @@
-﻿using EventBus.RabbitMQ.Standard.Base;
+﻿using EventBus.Base.Standard;
 
 namespace Subscriber.IntegrationEvents.Events
 {

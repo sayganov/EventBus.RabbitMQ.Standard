@@ -1,5 +1,5 @@
 ﻿using System.Net;
-using EventBus.RabbitMQ.Standard.Base;
+using EventBus.Base.Standard;
 using Microsoft.AspNetCore.Mvc;
 using Publisher.IntegrationEvents.Events;
 

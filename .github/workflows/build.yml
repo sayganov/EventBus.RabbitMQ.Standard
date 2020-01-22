@@ -14,11 +14,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-
-      - name: Fetch tags and master for GitVersion
-        run: |
-          git fetch --tags
-          git branch --create-reflog master origin/master
+      - run: |
+          git fetch --prune --unshallow
 
       - name: Setup GitVersion
         id: gitversion

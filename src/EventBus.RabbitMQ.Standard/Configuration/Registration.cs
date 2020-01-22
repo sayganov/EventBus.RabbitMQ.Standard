@@ -1,14 +1,13 @@
 ﻿using Autofac;
-using EventBus.RabbitMQ.Standard.Base;
+using EventBus.Base.Standard;
 using EventBus.RabbitMQ.Standard.Options;
-using EventBus.RabbitMQ.Standard.RabbitMq;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace EventBus.RabbitMQ.Standard
+namespace EventBus.RabbitMQ.Standard.Configuration
 {
-    public static class EventBus
+    public static class Registration
     {
-        public static IServiceCollection AddEventBus(this IServiceCollection services, EventBusOptions options)
+        public static IServiceCollection AddRabbitMqRegistration(this IServiceCollection services, RabbitMqOptions options)
         {
             services.AddSingleton<IEventBus, EventBusRabbitMq>(sp =>
             {

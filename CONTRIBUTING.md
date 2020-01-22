@@ -1,4 +1,4 @@
-## Contributing
+# Contributing
 
 1. Fork the repo (<https://github.com/sayganov/EventBus.RabbitMQ.Standard>)
 2. Create your feature branch (`git checkout -b feature/fooBar`)

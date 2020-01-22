@@ -1,13 +1,12 @@
 ﻿using EventBus.RabbitMQ.Standard.Options;
-using EventBus.RabbitMQ.Standard.RabbitMq;
 using Microsoft.Extensions.DependencyInjection;
 using RabbitMQ.Client;
 
-namespace EventBus.RabbitMQ.Standard
+namespace EventBus.RabbitMQ.Standard.Configuration
 {
-    public static class EventBusConnection
+    public static class Connection
     {
-        public static IServiceCollection AddEventBusConnection(this IServiceCollection services, EventBusOptions options)
+        public static IServiceCollection AddRabbitMqConnection(this IServiceCollection services, RabbitMqOptions options)
         {
             services.AddSingleton<IRabbitMqPersistentConnection>(sp =>
             {
@@ -15,7 +14,7 @@ namespace EventBus.RabbitMQ.Standard
 
                 var factory = new ConnectionFactory
                 {
-                    HostName = options.Connection,
+                    HostName = options.Host,
                     DispatchConsumersAsync = options.DispatchConsumersAsync
                 };
 

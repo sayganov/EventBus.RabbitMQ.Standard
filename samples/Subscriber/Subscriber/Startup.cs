@@ -1,4 +1,5 @@
-using EventBus.RabbitMQ.Standard;
+using EventBus.Base.Standard.Configuration;
+using EventBus.RabbitMQ.Standard.Configuration;
 using EventBus.RabbitMQ.Standard.Options;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -22,11 +23,11 @@ namespace Subscriber
         public void ConfigureServices(IServiceCollection services)
         {
             //Event Bus
-            var eventBusOptions = Configuration.GetSection("EventBus").Get<EventBusOptions>();
+            var rabbitMqOptions = Configuration.GetSection("RabbitMq").Get<RabbitMqOptions>();
 
-            services.AddEventBusConnection(eventBusOptions);
-            services.AddEventBus(eventBusOptions);
-            services.AddEventBusHandler(EventBusExtension.GetHandlers());
+            services.AddRabbitMqConnection(rabbitMqOptions);
+            services.AddRabbitMqRegistration(rabbitMqOptions);
+            services.AddEventBusHandling(EventBusExtension.GetHandlers());
 
             //Swagger
             services.AddSwaggerGen(c =>
