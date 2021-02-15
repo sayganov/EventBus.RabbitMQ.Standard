@@ -1,9 +1,12 @@
-﻿namespace EventBus.RabbitMQ.Standard.Options
+﻿using RabbitMQ.Client;
+
+namespace EventBus.RabbitMQ.Standard.Options
 {
     public class RabbitMqOptions
     {
         public string BrokerName { get; set; }
         public string Host { get; set; }
+        public int Port { get; set; } = AmqpTcpEndpoint.DefaultAmqpSslPort;
         public string Password { get; set; }
         public string QueueName { get; set; }
         public string RetryCount { get; set; }

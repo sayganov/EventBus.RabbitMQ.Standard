@@ -16,7 +16,8 @@ namespace EventBus.RabbitMQ.Standard.Configuration
                 var factory = new ConnectionFactory
                 {
                     HostName = options.Host,
-                    DispatchConsumersAsync = options.DispatchConsumersAsync
+                    DispatchConsumersAsync = options.DispatchConsumersAsync,
+                    Port = options.Port,
                 };
 
                 if (!string.IsNullOrEmpty(options.VirtualHost))
