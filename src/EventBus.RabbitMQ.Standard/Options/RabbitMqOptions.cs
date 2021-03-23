@@ -2,7 +2,6 @@
 {
     public class RabbitMqOptions
     {
-        public string AutofacScopeName { get; set; }
         public string BrokerName { get; set; }
         public string Host { get; set; }
         public string Password { get; set; }

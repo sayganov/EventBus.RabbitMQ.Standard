@@ -6,7 +6,8 @@ namespace EventBus.RabbitMQ.Standard.Configuration
 {
     public static class Connection
     {
-        public static IServiceCollection AddRabbitMqConnection(this IServiceCollection services, RabbitMqOptions options)
+        public static IServiceCollection AddRabbitMqConnection(this IServiceCollection services,
+            RabbitMqOptions options)
         {
             services.AddSingleton<IRabbitMqPersistentConnection>(sp =>
             {

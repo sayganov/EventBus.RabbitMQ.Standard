@@ -2,8 +2,8 @@
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
-using Autofac;
 using EventBus.Base.Standard;
+using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Polly;
@@ -17,28 +17,25 @@ namespace EventBus.RabbitMQ.Standard
     {
         private readonly IRabbitMqPersistentConnection _persistentConnection;
         private readonly IEventBusSubscriptionManager _subsManager;
-        private readonly ILifetimeScope _autofac;
+        private readonly IServiceScopeFactory _serviceScopeFactory;
         private readonly string _brokerName;
-        private readonly string _autofacScopeName;
         private readonly int _retryCount;
 
         private IModel _consumerChannel;
         private string _queueName;
 
         public EventBusRabbitMq(IRabbitMqPersistentConnection persistentConnection,
-            ILifetimeScope autofac,
+            IServiceScopeFactory serviceScopeFactory,
             IEventBusSubscriptionManager subsManager,
             string brokerName,
-            string autofacScopeName,
             string queueName = null,
             int retryCount = 5)
         {
             _persistentConnection = persistentConnection ?? throw new ArgumentNullException(nameof(persistentConnection));
             _subsManager = subsManager ?? new InMemoryEventBusSubscriptionManager();
-            _autofac = autofac ?? throw new ArgumentNullException(nameof(autofac));
+            _serviceScopeFactory = serviceScopeFactory ?? throw new ArgumentNullException(nameof(serviceScopeFactory));
 
             _brokerName = brokerName;
-            _autofacScopeName = autofacScopeName;
             _queueName = queueName;
             _retryCount = retryCount;
             _consumerChannel = CreateConsumerChannel();
@@ -75,7 +72,8 @@ namespace EventBus.RabbitMQ.Standard
 
             var policy = Policy.Handle<BrokerUnreachableException>()
                 .Or<SocketException>()
-                .WaitAndRetry(_retryCount, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)), (ex, time) => { });
+                .WaitAndRetry(_retryCount, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
+                    (ex, time) => { });
 
             var eventName = @event.GetType().Name;
 
@@ -108,11 +106,11 @@ namespace EventBus.RabbitMQ.Standard
         public void Subscribe<T, TH>() where T : IntegrationEvent where TH : IIntegrationEventHandler<T>
         {
             var eventName = _subsManager.GetEventKey<T>();
-           
+
             DoInternalSubscription(eventName);
 
             _subsManager.AddSubscription<T, TH>();
-            
+
             StartBasicConsume();
         }
 
@@ -159,7 +157,7 @@ namespace EventBus.RabbitMQ.Standard
             {
                 return;
             }
-            
+
             var consumer = new AsyncEventingBasicConsumer(_consumerChannel);
 
             consumer.Received += Consumer_Received;
@@ -170,7 +168,7 @@ namespace EventBus.RabbitMQ.Standard
         private async Task Consumer_Received(object sender, BasicDeliverEventArgs eventArgs)
         {
             var eventName = eventArgs.RoutingKey;
-            var message = Encoding.UTF8.GetString(eventArgs.Body);
+            var message = Encoding.UTF8.GetString(eventArgs.Body.Span.ToArray());
 
             try
             {
@@ -183,7 +181,7 @@ namespace EventBus.RabbitMQ.Standard
             }
             catch (Exception)
             {
-                // ignored
+                throw new Exception($"Error processing message \"{message}\"");
             }
 
             _consumerChannel.BasicAck(eventArgs.DeliveryTag, false);
@@ -216,14 +214,14 @@ namespace EventBus.RabbitMQ.Standard
         {
             if (_subsManager.HasSubscriptionsForEvent(eventName))
             {
-                using (var scope = _autofac.BeginLifetimeScope(_autofacScopeName))
+                using (var scope = _serviceScopeFactory.CreateScope())
                 {
                     var subscriptions = _subsManager.GetHandlersForEvent(eventName);
                     foreach (var subscription in subscriptions)
-                    {
                         if (subscription.IsDynamic)
                         {
-                            if (!(scope.ResolveOptional(subscription.HandlerType) is IDynamicIntegrationEventHandler handler))
+                            if (!(scope.ServiceProvider.GetService(subscription.HandlerType) is
+                                IDynamicIntegrationEventHandler handler))
                             {
                                 continue;
                             }
@@ -235,7 +233,7 @@ namespace EventBus.RabbitMQ.Standard
                         }
                         else
                         {
-                            var handler = scope.ResolveOptional(subscription.HandlerType);
+                            var handler = scope.ServiceProvider.GetService(subscription.HandlerType);
                             if (handler == null)
                             {
                                 continue;
@@ -246,9 +244,8 @@ namespace EventBus.RabbitMQ.Standard
                             var concreteType = typeof(IIntegrationEventHandler<>).MakeGenericType(eventType);
 
                             await Task.Yield();
-                            await (Task) concreteType.GetMethod("Handle").Invoke(handler, new[] { integrationEvent });
+                            await (Task) concreteType.GetMethod("Handle").Invoke(handler, new[] {integrationEvent});
                         }
-                    }
                 }
             }
         }
