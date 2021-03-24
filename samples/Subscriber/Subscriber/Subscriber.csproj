@@ -1,13 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="5.0.1" />
-    <PackageReference Include="EventBus.RabbitMQ.Standard" Version="3.0.0" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.0.0-rc5" />
+    <PackageReference Include="EventBus.RabbitMQ.Standard" Version="3.1.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.1.1" />
   </ItemGroup>
 
 </Project>

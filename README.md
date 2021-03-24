@@ -11,10 +11,9 @@ A library for the event-based communication by using RabbitMQ.
 
 ## How-To
 
-Install a couple of **`NuGet`** packages.
+Install a **`NuGet`** package.
 
 ```console
-PM> Install-Package Autofac.Extensions.DependencyInjection
 PM> Install-Package EventBus.RabbitMQ.Standard
 ```
 
@@ -24,7 +23,6 @@ Add configuration to **`appsettings.json`**.
 {
   "RabbitMq": {
     "BrokerName": "test_broker",
-    "AutofacScopeName": "test_autofac",
     "QueueName": "test_queue",
     "RetryCount": "5",
     "VirtualHost": "your_virtual_host",
@@ -82,7 +80,6 @@ public class Program
 
     public static IHostBuilder CreateHostBuilder(string[] args) =>
         Host.CreateDefaultBuilder(args)
-            .UseServiceProviderFactory(new AutofacServiceProviderFactory())
             .ConfigureWebHostDefaults(webBuilder =>
             {
                 webBuilder.UseStartup<Startup>();
@@ -155,7 +152,7 @@ public class Startup
     {
         ...
 
-        app.UseAuthorization();
+        app.SubscribeToEvents();
 
         ...
     }
