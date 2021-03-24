@@ -14,23 +14,37 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - run: |
-          git fetch --prune --unshallow
+        with:
+          fetch-depth: 0
 
-      - name: Setup GitVersion
+      - name: Install GitVersion
+        uses: gittools/actions/gitversion/setup@v0.9.7
+        with:
+          versionSpec: "5.5.0"
+
+      - name: Determine Version
         id: gitversion
-        uses: roryprimrose/rungitversion@v1.0.0
+        uses: gittools/actions/gitversion/execute@v0.9.7
+        with:
+          useConfigFile: true
+          configFilePath: "GitVersion.yml"
+
+      - name: Display GitVersion outputs
+        run: |
+          echo "Major: ${{ steps.gitversion.outputs.major }}"
+          echo "Minor: ${{ steps.gitversion.outputs.minor }}"
+          echo "Patch: ${{ steps.gitversion.outputs.patch }}"
 
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: 3.1.100
+          dotnet-version: 5.0.201
 
       - name: Restore
         run: dotnet restore $GITHUB_WORKSPACE/src
 
       - name: Pack
-        run: dotnet pack $GITHUB_WORKSPACE/src/EventBus.RabbitMQ.Standard/EventBus.RabbitMQ.Standard.csproj -c Release -p:PackageVersion=${{ steps.gitversion.outputs.SemVer }}
+        run: dotnet pack $GITHUB_WORKSPACE/src/EventBus.RabbitMQ.Standard/EventBus.RabbitMQ.Standard.csproj -c Release -p:PackageVersion=${{ steps.gitversion.outputs.semVer }}
 
-      - name: Push EventBus.RabbitMQ.Standard.${{ steps.gitversion.outputs.SemVer }}
-        run: dotnet nuget push $GITHUB_WORKSPACE/src/EventBus.RabbitMQ.Standard/bin/Release/EventBus.RabbitMQ.Standard.${{ steps.gitversion.outputs.SemVer }}.nupkg -k ${{ secrets.NUGET_API_KEY }} -s https://api.nuget.org/v3/index.json
+      - name: Push EventBus.RabbitMQ.Standard.${{ steps.gitversion.outputs.semVer }}
+        run: dotnet nuget push $GITHUB_WORKSPACE/src/EventBus.RabbitMQ.Standard/bin/Release/EventBus.RabbitMQ.Standard.${{ steps.gitversion.outputs.semVer }}.nupkg -k ${{ secrets.NUGET_API_KEY }} -s https://api.nuget.org/v3/index.json

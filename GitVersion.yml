@@ -1,5 +1,4 @@
 mode: MainLine
-next-version: 1.0.0
 assembly-informational-format: "{NugetVersion}"
 branches:
   master:
