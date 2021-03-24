@@ -3,10 +3,12 @@ next-version: 1.0.0
 assembly-informational-format: "{NugetVersion}"
 branches:
   master:
-    tag: ''
+    tag: ""
   feature:
-    tag: beta-{BranchName}
+    tag: feature-{BranchName}
+    increment: Minor
   hotfix:
-    tag: beta-{BranchName}
+    tag: hotfix-{BranchName}
+    increment: Patch
 ignore:
   sha: []
