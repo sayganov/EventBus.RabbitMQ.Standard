@@ -1,6 +1,4 @@
-﻿using RabbitMQ.Client;
-
-namespace EventBus.RabbitMQ.Standard.Options
+﻿namespace EventBus.RabbitMQ.Standard.Options
 {
     public class RabbitMqOptions
     {
