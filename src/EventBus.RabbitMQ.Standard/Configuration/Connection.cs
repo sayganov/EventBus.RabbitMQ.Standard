@@ -40,9 +40,9 @@ namespace EventBus.RabbitMQ.Standard.Configuration
                     retryCount = int.Parse(options.RetryCount);
                 }
 
-                if (!string.IsNullOrEmpty(options.Port))
+                if (options.Port != 0)
                 {
-                    factory.Port = int.Parse(options.Port);
+                    factory.Port = options.Port;
                 }
 
                 return new DefaultRabbitMqPersistentConnection(factory, retryCount);
