@@ -29,7 +29,9 @@ namespace EventBus.RabbitMQ.Standard
             IEventBusSubscriptionManager subsManager,
             string brokerName,
             string queueName = null,
-            int retryCount = 5)
+            int retryCount = 5,
+            bool durableExchange = false,
+            bool durableQueue = true)
         {
             _persistentConnection = persistentConnection ?? throw new ArgumentNullException(nameof(persistentConnection));
             _subsManager = subsManager ?? new InMemoryEventBusSubscriptionManager();
@@ -38,7 +40,7 @@ namespace EventBus.RabbitMQ.Standard
             _brokerName = brokerName;
             _queueName = queueName;
             _retryCount = retryCount;
-            _consumerChannel = CreateConsumerChannel();
+            _consumerChannel = CreateConsumerChannel(durableExchange, durableQueue);
             _subsManager.OnEventRemoved += SubsManager_OnEventRemoved;
         }
 
@@ -187,7 +189,7 @@ namespace EventBus.RabbitMQ.Standard
             _consumerChannel.BasicAck(eventArgs.DeliveryTag, false);
         }
 
-        private IModel CreateConsumerChannel()
+        private IModel CreateConsumerChannel(bool durableExchange, bool durableQueue)
         {
             if (!_persistentConnection.IsConnected)
             {
@@ -196,13 +198,13 @@ namespace EventBus.RabbitMQ.Standard
 
             var channel = _persistentConnection.CreateModel();
 
-            channel.ExchangeDeclare(_brokerName, "direct");
-            channel.QueueDeclare(_queueName, true, false, false, null);
+            channel.ExchangeDeclare(_brokerName, "direct", durableExchange);
+            channel.QueueDeclare(_queueName, durableQueue, false, false, null);
 
             channel.CallbackException += (sender, ea) =>
             {
                 _consumerChannel.Dispose();
-                _consumerChannel = CreateConsumerChannel();
+                _consumerChannel = CreateConsumerChannel(durableExchange, durableQueue);
 
                 StartBasicConsume();
             };

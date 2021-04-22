@@ -29,7 +29,9 @@ namespace EventBus.RabbitMQ.Standard.Configuration
                     eventBusSubscriptionsManager,
                     brokerName,
                     queueName,
-                    retryCount);
+                    retryCount,
+                    options.DurableExchange,
+                    options.DurableQueue);
             });
 
             services.AddSingleton<IEventBusSubscriptionManager, InMemoryEventBusSubscriptionManager>();
