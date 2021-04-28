@@ -20,6 +20,8 @@ namespace EventBus.RabbitMQ.Standard
         private readonly IServiceScopeFactory _serviceScopeFactory;
         private readonly string _brokerName;
         private readonly int _retryCount;
+        private readonly bool _durableExchange;
+        private readonly bool _durableQueue;
 
         private IModel _consumerChannel;
         private string _queueName;
@@ -40,7 +42,9 @@ namespace EventBus.RabbitMQ.Standard
             _brokerName = brokerName;
             _queueName = queueName;
             _retryCount = retryCount;
-            _consumerChannel = CreateConsumerChannel(durableExchange, durableQueue);
+            _durableExchange = durableExchange;
+            _durableQueue = durableQueue;
+            _consumerChannel = CreateConsumerChannel();
             _subsManager.OnEventRemoved += SubsManager_OnEventRemoved;
         }
 
@@ -81,7 +85,7 @@ namespace EventBus.RabbitMQ.Standard
 
             using (var channel = _persistentConnection.CreateModel())
             {
-                channel.ExchangeDeclare(_brokerName, "direct");
+                channel.ExchangeDeclare(_brokerName, "direct", _durableExchange);
 
                 var message = JsonConvert.SerializeObject(@event);
                 var body = Encoding.UTF8.GetBytes(message);
@@ -189,7 +193,7 @@ namespace EventBus.RabbitMQ.Standard
             _consumerChannel.BasicAck(eventArgs.DeliveryTag, false);
         }
 
-        private IModel CreateConsumerChannel(bool durableExchange, bool durableQueue)
+        private IModel CreateConsumerChannel()
         {
             if (!_persistentConnection.IsConnected)
             {
@@ -198,13 +202,13 @@ namespace EventBus.RabbitMQ.Standard
 
             var channel = _persistentConnection.CreateModel();
 
-            channel.ExchangeDeclare(_brokerName, "direct", durableExchange);
-            channel.QueueDeclare(_queueName, durableQueue, false, false, null);
+            channel.ExchangeDeclare(_brokerName, "direct", _durableExchange);
+            channel.QueueDeclare(_queueName, _durableQueue, false, false, null);
 
             channel.CallbackException += (sender, ea) =>
             {
                 _consumerChannel.Dispose();
-                _consumerChannel = CreateConsumerChannel(durableExchange, durableQueue);
+                _consumerChannel = CreateConsumerChannel();
 
                 StartBasicConsume();
             };
