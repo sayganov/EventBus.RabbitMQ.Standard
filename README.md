@@ -178,4 +178,4 @@ See [CONTRIBUTING.md](https://github.com/sayganov/EventBus.RabbitMQ.Standard/blo
 - [RabbitMQ](https://www.rabbitmq.com/)
 - [CloudAMQP](https://www.cloudamqp.com/)
 - [eShopOnContainers](https://github.com/dotnet-architecture/eShopOnContainers)
-- [.NET Core + RabbitMQ = 🎉](https://medium.com/@georgysay/net-core-rabbitmq-part-1-8da5e718d9dc)
+- [.NET Core + RabbitMQ = 🎉](https://dev.to/sayganov/net-core-rabbitmq-5dim)
