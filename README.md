@@ -68,25 +68,6 @@ public class ItemCreatedIntegrationEventHandler : IIntegrationEventHandler<ItemC
 }
 ```
 
-Modify **`Program.cs`** by adding one line of code to the class.
-
-```csharp
-public class Program
-{
-    public static void Main(string[] args)
-    {
-        CreateHostBuilder(args).Build().Run();
-    }
-
-    public static IHostBuilder CreateHostBuilder(string[] args) =>
-        Host.CreateDefaultBuilder(args)
-            .ConfigureWebHostDefaults(webBuilder =>
-            {
-                webBuilder.UseStartup<Startup>();
-            });
-}
-```
-
 In the **`publisher`** app, modify the method **`ConfigureServices`** in **`Startup.cs`**.
 
 ```csharp
