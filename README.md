@@ -29,6 +29,7 @@ Add configuration to **`appsettings.json`**.
     "Username": "your_username",
     "Password": "your_password",
     "Host": "your_host",
+    "Port": 5671,
     "DispatchConsumersAsync": true
   }
 }

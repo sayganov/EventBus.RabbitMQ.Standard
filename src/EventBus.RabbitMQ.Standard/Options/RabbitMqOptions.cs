@@ -4,6 +4,7 @@
     {
         public string BrokerName { get; set; }
         public string Host { get; set; }
+        public int Port { get; set; }
         public string Password { get; set; }
         public string QueueName { get; set; }
         public string RetryCount { get; set; }

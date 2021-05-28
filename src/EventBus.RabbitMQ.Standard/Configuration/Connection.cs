@@ -16,7 +16,8 @@ namespace EventBus.RabbitMQ.Standard.Configuration
                 var factory = new ConnectionFactory
                 {
                     HostName = options.Host,
-                    DispatchConsumersAsync = options.DispatchConsumersAsync
+                    DispatchConsumersAsync = options.DispatchConsumersAsync,
+                    Port = AmqpTcpEndpoint.DefaultAmqpSslPort,
                 };
 
                 if (!string.IsNullOrEmpty(options.VirtualHost))
@@ -37,6 +38,11 @@ namespace EventBus.RabbitMQ.Standard.Configuration
                 if (!string.IsNullOrEmpty(options.RetryCount))
                 {
                     retryCount = int.Parse(options.RetryCount);
+                }
+
+                if (options.Port != 0)
+                {
+                    factory.Port = options.Port;
                 }
 
                 return new DefaultRabbitMqPersistentConnection(factory, retryCount);
