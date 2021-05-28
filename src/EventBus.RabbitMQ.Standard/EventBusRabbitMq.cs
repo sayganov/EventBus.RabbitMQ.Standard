@@ -20,6 +20,8 @@ namespace EventBus.RabbitMQ.Standard
         private readonly IServiceScopeFactory _serviceScopeFactory;
         private readonly string _brokerName;
         private readonly int _retryCount;
+        private readonly bool _durableExchange;
+        private readonly bool _durableQueue;
 
         private IModel _consumerChannel;
         private string _queueName;
@@ -29,7 +31,9 @@ namespace EventBus.RabbitMQ.Standard
             IEventBusSubscriptionManager subsManager,
             string brokerName,
             string queueName = null,
-            int retryCount = 5)
+            int retryCount = 5,
+            bool durableExchange = false,
+            bool durableQueue = true)
         {
             _persistentConnection = persistentConnection ?? throw new ArgumentNullException(nameof(persistentConnection));
             _subsManager = subsManager ?? new InMemoryEventBusSubscriptionManager();
@@ -38,6 +42,8 @@ namespace EventBus.RabbitMQ.Standard
             _brokerName = brokerName;
             _queueName = queueName;
             _retryCount = retryCount;
+            _durableExchange = durableExchange;
+            _durableQueue = durableQueue;
             _consumerChannel = CreateConsumerChannel();
             _subsManager.OnEventRemoved += SubsManager_OnEventRemoved;
         }
@@ -79,7 +85,7 @@ namespace EventBus.RabbitMQ.Standard
 
             using (var channel = _persistentConnection.CreateModel())
             {
-                channel.ExchangeDeclare(_brokerName, "direct");
+                channel.ExchangeDeclare(_brokerName, "direct", _durableExchange);
 
                 var message = JsonConvert.SerializeObject(@event);
                 var body = Encoding.UTF8.GetBytes(message);
@@ -196,8 +202,8 @@ namespace EventBus.RabbitMQ.Standard
 
             var channel = _persistentConnection.CreateModel();
 
-            channel.ExchangeDeclare(_brokerName, "direct");
-            channel.QueueDeclare(_queueName, true, false, false, null);
+            channel.ExchangeDeclare(_brokerName, "direct", _durableExchange);
+            channel.QueueDeclare(_queueName, _durableQueue, false, false, null);
 
             channel.CallbackException += (sender, ea) =>
             {
