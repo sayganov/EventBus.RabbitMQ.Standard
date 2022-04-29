@@ -1,13 +1,11 @@
-﻿using System;
-using RabbitMQ.Client;
+﻿using RabbitMQ.Client;
 
-namespace EventBus.RabbitMQ.Standard
+namespace EventBus.RabbitMQ.Standard;
+
+public interface IRabbitMqPersistentConnection : IDisposable
 {
-    public interface IRabbitMqPersistentConnection : IDisposable
-    {
-        bool IsConnected { get; }
-        bool TryConnect();
+    bool IsConnected { get; }
+    bool TryConnect();
 
-        IModel CreateModel();
-    }
+    IModel CreateModel();
 }

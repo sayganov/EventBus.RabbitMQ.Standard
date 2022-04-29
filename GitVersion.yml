@@ -1,13 +1,38 @@
 mode: MainLine
 assembly-informational-format: "{NugetVersion}"
 branches:
-  master:
+  main:
+    regex: ^master$|^main$
     tag: ""
-  feature:
-    tag: feature-{BranchName}
-    increment: Minor
-  hotfix:
-    tag: hotfix-{BranchName}
     increment: Patch
+    prevent-increment-of-merged-branch-version: true
+    track-merge-target: false
+    source-branches: []
+    tracks-release-branches: false
+    is-release-branch: false
+    is-mainline: true
+    pre-release-weight: 55000
+  feature:
+    regex: ^features?[/-]
+    tag: useBranchName
+    increment: Minor
+    prevent-increment-of-merged-branch-version: false
+    track-merge-target: false
+    source-branches: ["main", "feature", "hotfix"]
+    tracks-release-branches: false
+    is-release-branch: false
+    is-mainline: false
+    pre-release-weight: 30000
+  hotfix:
+    regex: ^hotfix(es)?[/-]
+    tag: beta
+    increment: Patch
+    prevent-increment-of-merged-branch-version: false
+    track-merge-target: false
+    source-branches: ["main"]
+    tracks-release-branches: false
+    is-release-branch: false
+    is-mainline: false
+    pre-release-weight: 30000
 ignore:
   sha: []
